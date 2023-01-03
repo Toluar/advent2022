@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-with open('Input.11.t') as file:
+with open('Input.11') as file:
     Data = [i for i in file.read().strip().split("\n\n")]
 
-Nb_Tour_Max = 20
+Nb_Tour_Max = 10000
 
 class Singe:
     def __init__(self,Ind):
@@ -17,6 +17,7 @@ class Singe:
         self.Addition = "0"
 
 Jungle = []
+Modulo = 1
 
 for Singes in Data :
     Def_S = Singes.split("\n")
@@ -35,6 +36,7 @@ for Singes in Data :
     
     # Le test .... Divisible par .... 
     S.Condition = int(Def_S[3].replace("Test: divisible by ","").strip())
+    Modulo = Modulo * S.Condition
 
     # Le singe si test OK ou KO : 
     S.COK = int(Def_S[4].replace("If true: throw to monkey ","").strip())
@@ -42,9 +44,9 @@ for Singes in Data :
 
     Jungle.append(S)
 
+print(f"Modulo : {Modulo}")
 
 for NbTour in range(Nb_Tour_Max):
-    print(NbTour)
     for Singes in Jungle:
         for i in range(len(Singes.Items)):
             Elm = int(Singes.Items[0])
@@ -59,7 +61,7 @@ for NbTour in range(Nb_Tour_Max):
                     Elm = Elm + int(Singes.Addition)
                 elif Singes.Addition == "old":
                     Elm = Elm + Elm
-            Elm = int(Elm / 3)
+            Elm = Elm % Modulo
             if (Elm % Singes.Condition) == 0:
                 Singes.Items.remove(Singes.Items[0])
                 Jungle[int(Singes.COK)].Items.append(Elm)
